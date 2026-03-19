@@ -1,0 +1,37 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.item.consumables;
+
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.item.consumables.ConsumeEffect;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.item.consumables.ConsumeEffectType;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.mapper.AbstractMappedEntity;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.util.mappings.TypesBuilderData;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.wrapper.PacketWrapper;
+import ac.grim.grimac.shaded.jetbrains.annotations.ApiStatus;
+import ac.grim.grimac.shaded.jetbrains.annotations.Nullable;
+
+public class StaticConsumeEffectType<T extends ConsumeEffect<?>>
+extends AbstractMappedEntity
+implements ConsumeEffectType<T> {
+    private final PacketWrapper.Reader<T> reader;
+    private final PacketWrapper.Writer<T> writer;
+
+    @ApiStatus.Internal
+    public StaticConsumeEffectType(@Nullable TypesBuilderData data, PacketWrapper.Reader<T> reader, PacketWrapper.Writer<T> writer) {
+        super(data);
+        this.reader = reader;
+        this.writer = writer;
+    }
+
+    @Override
+    public T read(PacketWrapper<?> wrapper) {
+        return (T)((ConsumeEffect)this.reader.apply(wrapper));
+    }
+
+    @Override
+    public void write(PacketWrapper<?> wrapper, T effect) {
+        this.writer.accept(wrapper, effect);
+    }
+}
+

@@ -1,0 +1,36 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.entity.pig;
+
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.entity.pig.PigVariant;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.entity.pig.StaticPigVariant;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.resources.ResourceLocation;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.util.mappings.TypesBuilderData;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.util.mappings.VersionedRegistry;
+import ac.grim.grimac.shaded.jetbrains.annotations.ApiStatus;
+
+public final class PigVariants {
+    private static final VersionedRegistry<PigVariant> REGISTRY = new VersionedRegistry("pig_variant");
+    public static final PigVariant COLD = PigVariants.define("cold", PigVariant.ModelType.COLD, "cold_pig");
+    public static final PigVariant TEMPERATE = PigVariants.define("temperate", PigVariant.ModelType.NORMAL, "temperate_pig");
+    public static final PigVariant WARM = PigVariants.define("warm", PigVariant.ModelType.NORMAL, "warm_pig");
+
+    private PigVariants() {
+    }
+
+    @ApiStatus.Internal
+    public static PigVariant define(String name, PigVariant.ModelType modelType, String texture) {
+        ResourceLocation assetId = new ResourceLocation("entity/pig/" + texture);
+        return REGISTRY.define(name, data -> new StaticPigVariant((TypesBuilderData)data, modelType, assetId));
+    }
+
+    public static VersionedRegistry<PigVariant> getRegistry() {
+        return REGISTRY;
+    }
+
+    static {
+        REGISTRY.unloadMappings();
+    }
+}
+

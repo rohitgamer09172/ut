@@ -1,0 +1,83 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  lombok.Generated
+ *  org.bukkit.Bukkit
+ *  org.bukkit.World
+ *  org.bukkit.block.Block
+ */
+package ac.grim.grimac.platform.bukkit.world;
+
+import ac.grim.grimac.platform.api.world.PlatformChunk;
+import ac.grim.grimac.platform.api.world.PlatformWorld;
+import ac.grim.grimac.platform.bukkit.world.BukkitPlatformChunk;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.PacketEvents;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.manager.server.ServerVersion;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
+import ac.grim.grimac.shaded.io.github.retrooper.packetevents.util.SpigotConversionUtil;
+import ac.grim.grimac.shaded.jetbrains.annotations.NotNull;
+import ac.grim.grimac.shaded.jetbrains.annotations.Nullable;
+import java.util.UUID;
+import lombok.Generated;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+
+public class BukkitPlatformWorld
+implements PlatformWorld {
+    private static final boolean LEGACY_SERVER_VERSION = PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_12_2);
+    @NotNull
+    private final World bukkitWorld;
+
+    @Override
+    public boolean isChunkLoaded(int chunkX, int chunkZ) {
+        return this.bukkitWorld.isChunkLoaded(chunkX, chunkZ);
+    }
+
+    @Override
+    public WrappedBlockState getBlockAt(int x, int y, int z) {
+        if (LEGACY_SERVER_VERSION) {
+            Block block = this.bukkitWorld.getBlockAt(x, y, z);
+            int blockId = block.getType().getId() << 4 | block.getData();
+            return WrappedBlockState.getByGlobalId(blockId);
+        }
+        return SpigotConversionUtil.fromBukkitBlockData(this.bukkitWorld.getBlockAt(x, y, z).getBlockData());
+    }
+
+    @Override
+    public String getName() {
+        return this.bukkitWorld.getName();
+    }
+
+    @Override
+    @Nullable
+    public UUID getUID() {
+        return this.bukkitWorld.getUID();
+    }
+
+    @Override
+    public PlatformChunk getChunkAt(int currChunkX, int currChunkZ) {
+        return new BukkitPlatformChunk(this.bukkitWorld.getChunkAt(currChunkX, currChunkZ));
+    }
+
+    @Override
+    public boolean isLoaded() {
+        return Bukkit.getWorld((UUID)this.bukkitWorld.getUID()) != null;
+    }
+
+    @NotNull
+    @Generated
+    public World getBukkitWorld() {
+        return this.bukkitWorld;
+    }
+
+    @Generated
+    public BukkitPlatformWorld(@NotNull World bukkitWorld) {
+        if (bukkitWorld == null) {
+            throw new NullPointerException("bukkitWorld is marked non-null but is null");
+        }
+        this.bukkitWorld = bukkitWorld;
+    }
+}
+

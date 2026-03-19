@@ -1,0 +1,45 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  org.jspecify.annotations.NullMarked
+ */
+package ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.dialog;
+
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.dialog.Dialog;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.dialog.DialogType;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.mapper.AbstractMappedEntity;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.nbt.NBTCompound;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.util.NbtMapDecoder;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.protocol.util.NbtMapEncoder;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.util.mappings.TypesBuilderData;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.wrapper.PacketWrapper;
+import ac.grim.grimac.shaded.jetbrains.annotations.ApiStatus;
+import ac.grim.grimac.shaded.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
+public class StaticDialogType<T extends Dialog>
+extends AbstractMappedEntity
+implements DialogType<T> {
+    private final NbtMapDecoder<T> decoder;
+    private final NbtMapEncoder<T> encoder;
+
+    @ApiStatus.Internal
+    public StaticDialogType(@Nullable TypesBuilderData data, NbtMapDecoder<T> decoder, NbtMapEncoder<T> encoder) {
+        super(data);
+        this.decoder = decoder;
+        this.encoder = encoder;
+    }
+
+    @Override
+    public T decode(NBTCompound compound, PacketWrapper<?> wrapper) {
+        return (T)((Dialog)this.decoder.decode(compound, wrapper));
+    }
+
+    @Override
+    public void encode(NBTCompound compound, PacketWrapper<?> wrapper, T dialog) {
+        this.encoder.encode(compound, wrapper, dialog);
+    }
+}
+

@@ -1,0 +1,67 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'ac.grim'
+version = '2.3.73'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+    maven { url = uri('https://repo.papermc.io/repository/maven-public/') }
+    maven { url = uri('https://jitpack.io') }
+    maven { url = uri('https://repo.grim.ac/snapshots') }
+    maven { url = uri('https://repo.extendedclip.com/content/repositories/placeholderapi/') }
+    maven { url = uri('https://nexus.scarsz.me/content/repositories/releases') }
+}
+
+sourceSets {
+    main {
+        java {
+            // Exclude decompiled shaded libraries and other known problematic files
+            exclude 'ac/grim/grimac/shaded/**'
+            exclude 'ac/grim/grimac/utils/blockplace/ConsumesBlockPlace.java'
+        }
+    }
+}
+
+dependencies {
+    // Core platform APIs (match Grim's versions)
+    // Use a Paper API compatible with Java 17 for this build environment
+    compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+    compileOnly 'me.clip:placeholderapi:2.11.6'
+
+    // Optional: PacketEvents (use compileOnly unless you want to shade it)
+    compileOnly 'com.github.retrooper:packetevents-spigot:2.11.2+675bc5c-SNAPSHOT'
+
+    // Runtime/implementation libraries used by Grim
+    implementation 'org.incendo:cloud-paper:2.0.0-beta.14'
+    implementation 'net.kyori:adventure-platform-bukkit:4.4.0'
+    implementation 'ac.grim.grimac:grim-bukkit-internal:1.2.4.0'
+    // Grim internal artifacts and shims (provide relocated/shaded types)
+    compileOnly 'ac.grim.grimac:grim-internal:1.2.4.0'
+    compileOnly 'ac.grim.grimac:grim-internal-shims:1.2.4.0'
+    compileOnly 'ac.grim.grimac:GrimAPI:1.2.4.0'
+
+    // Annotations and Lombok used in decompiled sources
+    compileOnly 'org.jetbrains:annotations:24.1.0'
+    compileOnly 'org.projectlombok:lombok:9.0.0'
+    annotationProcessor 'org.projectlombok:lombok:9.0.0'
+}
+
+tasks.named('jar') {
+    archiveBaseName.set('minevia')
+    archiveVersion.set(version)
+}
+
+// Shadow produces a single plugin jar including dependencies when desired.
+tasks.named('shadowJar') {
+    archiveBaseName.set('minevia')
+    archiveVersion.set(version)
+    mergeServiceFiles()
+}

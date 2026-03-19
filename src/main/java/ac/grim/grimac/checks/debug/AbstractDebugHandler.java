@@ -1,0 +1,19 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package ac.grim.grimac.checks.debug;
+
+import ac.grim.grimac.checks.Check;
+import ac.grim.grimac.player.GrimPlayer;
+
+public abstract class AbstractDebugHandler
+extends Check {
+    public AbstractDebugHandler(GrimPlayer player) {
+        super(player);
+    }
+
+    public abstract void toggleListener(GrimPlayer var1);
+
+    public abstract boolean toggleConsoleOutput();
+}
+

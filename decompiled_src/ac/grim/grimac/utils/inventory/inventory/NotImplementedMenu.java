@@ -1,0 +1,23 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package ac.grim.grimac.utils.inventory.inventory;
+
+import ac.grim.grimac.player.GrimPlayer;
+import ac.grim.grimac.shaded.com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientClickWindow;
+import ac.grim.grimac.utils.inventory.Inventory;
+import ac.grim.grimac.utils.inventory.inventory.AbstractContainerMenu;
+
+public class NotImplementedMenu
+extends AbstractContainerMenu {
+    public NotImplementedMenu(GrimPlayer player, Inventory playerInventory) {
+        super(player, playerInventory);
+        player.inventory.isPacketInventoryActive = false;
+        player.inventory.needResend = true;
+    }
+
+    @Override
+    public void doClick(int button, int slotID, WrapperPlayClientClickWindow.WindowClickType clickType) {
+    }
+}
+
